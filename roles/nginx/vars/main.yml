@@ -3,3 +3,9 @@
 sites:
  - ipssi-encore.form
  - ecole-ipssi-encore.form
+ 
+mysql_user: "admin"
+mysql_password: "secret"
+mysql_dbname: "test"
+db_host: "192.168.71.134"
+webserver_host: "192.168.71.134"
