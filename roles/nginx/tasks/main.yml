@@ -1,6 +1,11 @@
 ---
 # tasks file for nginx
 
+- name: Clean du serveur web nginx
+  yum:
+   name: nginx
+   state: absent
+
 - name: installation du dépot epel-release
   yum:
    name: epel-release
@@ -64,3 +69,47 @@
   loop:
     "{{ sites }}"
   notify: start_nginx 
+  
+  
+  ## Serveur de base de données
+
+  - name: ajout dépot epel-release
+    yum:
+     name: epel-release
+     state: present
+
+  - name: Installation MariaDB
+    yum:
+     name:
+      - mariadb-server
+      - python2-PyMySQL 
+
+     state: present
+
+  - name: Start et activation MariaDB
+    systemd:
+      name: mariadb
+      state: started
+      enabled: yes
+
+  - name: Création fichier client
+    copy:
+      dest: /root/my.cnf
+      content: |
+        [client]
+        user=root
+        password= ""
+  
+  - name: Upload sql table config
+    template:
+     src: table.sql.j2
+     dest: /tmp/table.sql
+
+  - name: Insert table sql
+    mysql_db:
+     name: "{{ mysql_dbname }}"
+     state: present
+     login_user: root
+     login_password: ""
+     state: import
+     target: /tmp/table.sql
