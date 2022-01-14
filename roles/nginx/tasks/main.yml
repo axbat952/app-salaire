@@ -73,32 +73,27 @@
   
   ## Serveur de base de données
 
-- name: ajout dépot epel-release
-   yum:
-    name: epel-release
-    state: present
-
 - name: Installation MariaDB
   yum:
-    name:
-     - mariadb-server
-     - python2-PyMySQL 
+   name:
+    - mariadb-server
+    - python2-PyMySQL 
 
-    state: present
+   state: present
 
 - name: Start et activation MariaDB
   systemd:
-    name: mariadb
-    state: started
-    enabled: yes
+   name: mariadb
+   state: started
+   enabled: yes
 
 - name: Création fichier client
   copy:
-    dest: /root/my.cnf
-    content: |
-      [client]
-      user=root
-      password= ""
+   dest: /root/my.cnf
+   content: |
+     [client]
+     user=root
+     password= ""
   
 - name: Upload sql table config
   template:
